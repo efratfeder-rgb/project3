@@ -5,6 +5,9 @@ const database = {
         this.contacts = JSON.parse(localStorage.getItem("contacts"))
         this.contacts.push(contact);
         localStorage.setItem("contacts", JSON.stringify(this.contacts));
-        return { success: true, message: 'Contact added successfully.' };
+        return true
     },
+    getall: function(){
+        return JSON.parse(localStorage.getItem("contacts"))
+    }
 };
