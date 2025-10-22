@@ -3,9 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="../css/main.css" />
   </head>
-  <body></body>
+  <body>
+    <div id="content"></div>
+    <template class="login" id="login">
+      <label for="username1">Username:</label>
+      <input type="text" id="username1" required />
+      <label for="password1">Password:</label>
+      <input type="password" id="password1" required />
+      <input type="button" id="submit1" value="Login" />
+      <h1 id="registerPage">Sign up</h1>
+      <h1 id="logout1">logout</h1>
+    </template>
+
+    <template class="signup" id="signup">
+      <label for="username2">Username:</label>
+      <input type="text" id="username2" required />
+      <label for="password2">Password:</label>
+      <input type="password" id="password2" required />
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" required />
+      <input type="button" id="submit2" value="sign up" />
+
+      <h1 id="loginPage">Login</h1>
+      <h1 id="logout2">logout</h1>
+    </template>
+
+    <template class="page" id="page">
+      <h2>My Contacts</h2>
+      <div id="contacts-container"></div>
+      <input type="button" id="AddContact" value="Add Contact" />
+      <input type="button" id="logoutfromcontacts" value="log out" />
+    </template>
+  </body>
+  <script src="../js/main.js"></script>
+
   <script src="../js/database.js"></script>
   <script src="../js/server.js"></script>
   <script src="../js/fajax.js"></script>

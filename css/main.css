@@ -1,0 +1,76 @@
+/* Make the page background and text clean */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* The container that holds the active template */
+#content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* Labels above inputs */
+label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+input[type="button"] {
+    margin-top: 15px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+input[type="button"]:hover {
+    background-color: #357ab8;
+}
+
+/* Page links (h1 used like buttons) */
+h1 {
+    font-size: 16px;
+    color: #4a90e2;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: color 0.2s;
+}
+
+h1:hover {
+    color: #1c5fa3;
+}
+
+/* Hide template content */
+template {
+    display: none;
+}
+
