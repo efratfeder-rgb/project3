@@ -3,21 +3,100 @@ class contact{
         this.name = name;
         this.number = number;
     }
+    // set name(name){
+    //     this.name=name;
+    // }
 }
+
 const newContact = new contact("Alice", "0509876543");
 const newContact1 = new contact("shlomo", "0523456789");
-const fajax1 = new fajax();
-fajax1.open("POST")
-fajax1.onload((res)=> {if(res)console.log("woohooo")
-    else
-        console.log("oh no")
-})
-fajax1.send(newContact)
-fajax1.send(newContact1)
+const newContact2 = new contact("shlomit", "0525256908");
+const newContact3 = new contact("dani", "0585456273");
+const newContact4 = new contact("will", "052753206");
+
+function addNewContact(newcontact){
+    const fajax1 = new fajax();
+    fajax1.open("POST" , "contact/addcontact")
+    fajax1.onload((res)=> {if(res)console.log("woohooo")
+        else
+            console.log("oh no")
+    })
+    fajax1.send(newcontact)
+}
+
+function getAllContacts() {
+    return new Promise((resolve, reject) => {
+    const fajax2 = new fajax();
+    fajax2.open("GET" , "contact/getcontact");
+    fajax2.onload((res) => {
+         try {
+                const contacts = JSON.parse(res);
+                resolve(contacts);
+            } catch (e) {
+                console.error("Error parsing response:", e);
+                reject(e);
+            }
+      
+    });
+    fajax2.send();
+  });
+}
+async function getContactByName(name) {
+  const contacts = await getAllContacts(); 
+  return contacts.find(contact => contact.name === name);
+}
+
+function deleteContactByName(contact){
+    const fajax3 = new fajax();
+    fajax3.open('DELETE', "contact/deletecontact");
+    fajax3.onload((res)=> {console.log(res)});
+    fajax3.send(contact);
+}
+
+async function updatecontactname(oldname ,newname){
+    const editedcontact =await getContactByName(oldname)
+    console.log(editedcontact);
+    editedcontact.name=newname;
+    const fajax4 = new fajax();
+    fajax4.open('PUT' , "contact/editname/");
+    fajax4.onload((res)=> {console.log(res)});
+    fajax4.send(editedcontact);
+}
+async function updatecontactnumber(name ,newnum){
+    const editedcontact = await getContactByName(name)
+    editedcontact.number=newnum;
+    console.log(editedcontact);
+    const fajax5 = new fajax();
+    fajax5.open('PUT', "contact/editnumber/");
+    fajax5.onload();
+    fajax5.send(editedcontact);
+}
+
+addNewContact(newContact)//addeventlistener
+addNewContact(newContact1)
+addNewContact(newContact2)
+addNewContact(newContact3)
+addNewContact(newContact4)
+
+async function getContacts() {
+    const contacts = await getAllContacts();
+    console.log(contacts);
+}
+getContacts();
+// console.log(getAllContacts());
+async function findContact(name) {
+    const contacts = await getContactByName(name);
+    console.log(contacts);
+}
+findContact("shlomo")
+// console.log(getContactByName("shlomo"))
+// async function deleteContact(name) {
+//     const contacts = await deleteContactByName(name);
+//     // console.log(contacts);
+// }
+// deleteContact(newContact2.name);
+// updatecontactname(newContact3.name ,"roy")
+// // updatecontactnumber(newContact4.name ,"0500000000")
 
 
-const fajax2 = new fajax();
-fajax2.open("GET")
-fajax2.onload((res)=> {console.log(res)
-})
-fajax2.send()
+// console.log(getAllContacts());

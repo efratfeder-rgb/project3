@@ -2,18 +2,20 @@ class fajax {
     constructor(){
         this.contact = null;
         this.callback = null;
+        this.url = null;
     }
-    open(method){
+    open(method , url){
         this.method = method;
+        this.url=url;
     }
     send(contact){
          if (arguments.length === 1){
              this.contact = contact;
-             const response = server.actionType(this.contact ,this.method);
+             const response = server.actionType(this.contact ,this.method,this.url);
              if(this.callback)this.callback(response);
             }
         else{
-            const response = server.actionType(this.contact ,this.method)   
+            const response = server.actionType(this.contact ,this.method ,this.url)   
             if(this.callback)this.callback(response);
         }
     }
