@@ -4,7 +4,7 @@ const page = document.getElementById("page");
 const pagecontent = document.getElementById("content");
 
 window.addEventListener("DOMContentLoaded", function () {
-  showContactsPage();
+  showLoginPage();
 });
 
 function showLoginPage() {
@@ -17,14 +17,15 @@ function showLoginPage() {
   const registerPage = clon.querySelector("#registerPage");
   const logout1 = clon.querySelector("#logout1");
 
-  submitButton.addEventListener("click", function () {
+  submitButton.addEventListener("click", async function () {
     const username = usernameInput.value;
     const password = passwordInput.value;
-    if (localStorage.getItem(username) === password) {
-      sessionStorage.setItem("isConnected", "true");
-      showGamePage();
-    } else {
-      alert("nope");
+
+    const currentuser = await getUserByName(username);
+
+    if (checklogin(currentuser, password)) {
+      sessionStorage.setItem("isConnected", JSON.stringify(currentuser));
+      showContactsPage();
     }
   });
 
@@ -48,7 +49,7 @@ function showRegisterPage() {
   const loginPage = clon.querySelector("#loginPage");
   const logout2 = clon.querySelector("#logout2");
 
-  submitButton.addEventListener("click", function () {
+  submitButton.addEventListener("click", async function () {
     const username = usernameInput.value;
     const password = passwordInput.value;
     const confirm = confirmInput.value;
@@ -57,13 +58,14 @@ function showRegisterPage() {
       alert("Passwords do not match!");
       return;
     }
-    if (localStorage.getItem(username) === null) {
-      localStorage.setItem(username, password);
-      sessionStorage.setItem("isConnected", "true");
-      alert(`Registered: ${username}`);
-      showGamePage();
-    } else {
-      alert("no!");
+
+    const success = await checkusers(username, password);
+
+    if (success) {
+      const currentuser = await getUserByName(username);
+      sessionStorage.setItem("isConnected", JSON.stringify(currentuser));
+
+      showContactsPage();
     }
   });
 
@@ -100,83 +102,81 @@ function showContactsPage() {
 
   content.appendChild(clon);
 
-  loadContacts();
+  //   loadContacts();
 }
 
-// Render the list of contact names
-function loadContacts() {
-  const fajaxGet = new fajax();
-  fajaxGet.open("GET");
-  fajaxGet.onload((contacts) => {
-    renderContactsList(contacts);
-  });
-  fajaxGet.send();
-}
+// // Render the list of contact names
+// function loadContacts() {
+//   const fajaxGet = new fajax();
+//   fajaxGet.open("GET");
+//   fajaxGet.onload((contacts) => {
+//     renderContactsList(contacts);
+//   });
+//   fajaxGet.send();
+// }
 
 // Display names
-function renderContactsList(contacts) {
-  const container = document.getElementById("contacts-container");
-  container.innerHTML = ""; // clear old content
+// function renderContactsList(contacts) {
+//   const container = document.getElementById("contacts-container");
+//   container.innerHTML = ""; // clear old content
 
-  contacts.forEach((c, index) => {
-    const contactDiv = document.createElement("div");
-    contactDiv.classList.add("contact-item");
-    contactDiv.textContent = c.name;
-    contactDiv.style.cursor = "pointer";
-    contactDiv.style.padding = "5px";
-    contactDiv.style.borderBottom = "1px solid #ccc";
+//   contacts.forEach((c, index) => {
+//     const contactDiv = document.createElement("div");
+//     contactDiv.classList.add("contact-item");
+//     contactDiv.textContent = c.name;
+//     contactDiv.style.cursor = "pointer";
+//     contactDiv.style.padding = "5px";
+//     contactDiv.style.borderBottom = "1px solid #ccc";
 
-    // Click handler: popup with info + buttons
-    contactDiv.addEventListener("click", () => {
-      showContactPopup(c, index);
-    });
+// Click handler: popup with info + buttons
+//   contactDiv.addEventListener("click", () => {
+//     showContactPopup(c, index);
+// //   });
 
-    container.appendChild(contactDiv);
-  });
-}
+//   container.appendChild(contactDiv);
+// }
 
 // Popup with contact info and buttons
-function showContactPopup(contact, index) {
-  // Simple popup div
-  const popup = document.createElement("div");
-  popup.style.position = "fixed";
-  popup.style.top = "50%";
-  popup.style.left = "50%";
-  popup.style.transform = "translate(-50%, -50%)";
-  popup.style.background = "white";
-  popup.style.padding = "20px";
-  popup.style.border = "2px solid #333";
-  popup.style.borderRadius = "8px";
-  popup.style.zIndex = "1000";
-  popup.style.textAlign = "center";
+// function showContactPopup(contact, index) {
+//   // Simple popup div
+//   const popup = document.createElement("div");
+//   popup.style.position = "fixed";
+//   popup.style.top = "50%";
+//   popup.style.left = "50%";
+//   popup.style.transform = "translate(-50%, -50%)";
+//   popup.style.background = "white";
+//   popup.style.padding = "20px";
+//   popup.style.border = "2px solid #333";
+//   popup.style.borderRadius = "8px";
+//   popup.style.zIndex = "1000";
+//   popup.style.textAlign = "center";
 
-  popup.innerHTML = `
-    <h3>${contact.name}</h3>
-    <p>${contact.number}</p>
-    <button id="editBtn">Edit</button>
-    <button id="deleteBtn">Delete</button>
-    <br><br>
-    <button id="closeBtn">Close</button>
-  `;
+//   popup.innerHTML = `
+//     <h3>${contact.name}</h3>
+//     <p>${contact.number}</p>
+//     <button id="editBtn">Edit</button>
+//     <button id="deleteBtn">Delete</button>
+//     <br><br>
+//     <button id="closeBtn">Close</button>
+//   `;
 
-  document.body.appendChild(popup);
+//   document.body.appendChild(popup);
 
-  // Close button
-  popup.querySelector("#closeBtn").addEventListener("click", () => {
-    document.body.removeChild(popup);
-  });
+//   // Close button
+//   popup.querySelector("#closeBtn").addEventListener("click", () => {
+//     document.body.removeChild(popup);
+//   });
 
-  // Call your edit/delete functions with the contact index
-  popup.querySelector("#editBtn").addEventListener("click", () => {
-    editContact(index); // your function
-    document.body.removeChild(popup);
-  });
+//   // Call your edit/delete functions with the contact index
+//   popup.querySelector("#editBtn").addEventListener("click", () => {
+//     editContact(index); // your function
+//     document.body.removeChild(popup);
+//   });
 
-  popup.querySelector("#deleteBtn").addEventListener("click", () => {
-    deleteContact(index); // your function
-    document.body.removeChild(popup);
-  });
-}
+//   popup.querySelector("#deleteBtn").addEventListener("click", () => {
+//     deleteContact(index); // your function
+//     document.body.removeChild(popup);
+//   });
+// }
 
 // Initialize
-window.addEventListener("DOMContentLoaded", showContactsPage);
