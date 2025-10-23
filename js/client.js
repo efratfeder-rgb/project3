@@ -16,7 +16,8 @@ const newContact2 = new contact("shlomit", "0525256908");
 const newContact3 = new contact("dani", "0585456273");
 const newContact4 = new contact("will", "052753206");
 
-function addNewContact(newcontact) {
+function addNewContact(name, number) {
+  const newcontact = new contact(name, number);
   const fajax1 = new fajax();
   fajax1.open("POST", "contact/addcontact");
   fajax1.onload((res) => {
@@ -149,7 +150,7 @@ function checklogin(currentuser, password) {
 
 async function getContacts() {
   const contacts = await getAllContacts();
-  console.log(contacts);
+  console.log("ל:",contacts);
 }
 getContacts();
 // console.log(getAllContacts());

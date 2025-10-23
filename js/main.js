@@ -97,23 +97,131 @@ function showContactsPage() {
 
   const AddButton = clon.querySelector("#AddContact");
   AddButton.addEventListener("click", () => {
-    console.log("HI");
+    content.innerHTML = "";
+
+    content.innerHTML = `
+    <div>
+      <label for="name" class="text">name</label>
+      <input type="text" id="name" placeholder="enter name" />
+    </div>
+    <div>
+      <label for="phone" class="text">phone number</label>
+      <input type="tel" id="phone" placeholder="enter phone number" />
+    </div>
+    <button id="submit4">add</button>
+    <button id="closeBtn">Close</button>
+
+  `;
+
+    const submitButton = document.getElementById('submit4');
+    submitButton.addEventListener("click", () => {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      console.log("שם:", name);
+      console.log("מספר טלפון:", phone);
+      addNewContact(name, phone);
+      showContactsPage();
+    });
+    const closeadd= document.getElementById("closeBtn")
+    closeadd.addEventListener("click", () => {
+    showContactsPage();
+  });
+
   });
 
   content.appendChild(clon);
-
-  //   loadContacts();
+  loadContacts();
 }
 
+  
+
+
+
 // // Render the list of contact names
-// function loadContacts() {
-//   const fajaxGet = new fajax();
-//   fajaxGet.open("GET");
-//   fajaxGet.onload((contacts) => {
-//     renderContactsList(contacts);
-//   });
-//   fajaxGet.send();
-// }
+function loadContacts() {
+  const fajaxGet = new fajax();
+  fajaxGet.open("GET" ,"contact/getcontact");
+  fajaxGet.onload((contacts) => {
+    renderContactsList(JSON.parse(contacts));
+  });
+  fajaxGet.send();
+}
+
+function renderContactsList(contacts) {
+  const container = document.getElementById("contacts-container");
+  container.innerHTML = "";
+    contacts.forEach((contact, index) => {
+    const contactDiv = document.createElement("div");
+    contactDiv.classList.add("contact-item");
+    contactDiv.textContent = contact.name;
+    contactDiv.addEventListener("click", () => {
+    showContactPopup(contact, index);
+  });
+
+  container.appendChild(contactDiv);
+})
+}
+
+function showContactPopup(contact, index) {
+  const popup = document.createElement("div");
+  popup.classList.add("popup");
+  
+
+  popup.innerHTML = 
+  `<button id="editNameBtn"><h3>${contact.name}</h3></button>
+    <button id="editNumberBtn"><p>${contact.number}</p></button>
+    <button id="deleteBtn">Delete</button>
+    <br><br>
+    <button id="closeBtn">Close</button>`;
+
+  document.body.appendChild(popup);
+
+  popup.querySelector("#closeBtn").addEventListener("click", () => {
+    document.body.removeChild(popup);
+  });
+
+  popup.querySelector("#editNameBtn").addEventListener("click", () => {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = `input-1`; 
+    const container = document.getElementById('#editNameBtn');
+    container.appendChild(input);
+    const inputName = clon.querySelector('input').value;
+    input.addEventListener("keydown", function(event){
+      if (event.key==="Enter"){
+        updatecontactname(contact.name,inputName);
+         document.body.removeChild(popup);
+
+      }
+    })
+  });
+
+    popup.querySelector("#editNumberBtn").addEventListener("click", () => {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = `input-2`; 
+    const container = document.getElementById("#editNumberBtn");
+    container.appendChild(input);
+    const inputName = clon.querySelector('input').value;
+    input.addEventListener("keydown", function(event){
+      if (event.key==="Enter"){
+        updatecontactnumber(contact.name,inputName);
+         document.body.removeChild(popup);
+      }
+    })
+  });
+  
+  popup.querySelector("#deleteBtn").addEventListener("click", () => {
+    deleteContactByName(contact.name);
+    document.body.removeChild(popup);
+    loadContacts()
+  });
+}
+
+
+
+
+
 
 // Display names
 // function renderContactsList(contacts) {

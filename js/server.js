@@ -19,7 +19,7 @@ const server = {
         }
         break;
       case "DELETE":
-        if (url === "contact/deledtecontact") {
+        if (url === "contact/deletecontact") {
           return database.deletecontact(person);
         }
         break;

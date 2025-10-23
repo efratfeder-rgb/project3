@@ -22,10 +22,12 @@ const database = {
     return this.contacts;
   },
   deletecontact: function (name) {
-    this.contacts = this.getall();
+    this.contacts =this.getall(); 
+    console.log(this.contacts)
     const indexToRemove = this.contacts.findIndex(
       (contact) => contact.name === name
     );
+    console.log(indexToRemove)
     if (indexToRemove !== -1) {
       this.contacts.splice(indexToRemove, 1);
       localStorage.setItem("contacts", JSON.stringify(this.contacts));
